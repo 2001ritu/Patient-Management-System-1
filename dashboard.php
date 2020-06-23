@@ -202,7 +202,7 @@ chart.render();
 
 <div class="Header">
 <a href="bp.php"> <input type="submit" name="" value="Blood Pressure"></a>
-     <a href="sp02.php"> <input type="submit" name="" value="SPO2 Level"></a>
+     <a href="spo2.php"> <input type="submit" name="" value="SPO2 Level"></a>
      <a href="bt.php"> <input type="submit" name="" value="Body Temperature"></a>
      <a href="pr.php"> <input type="submit" name="" value="PR"></a>
 
