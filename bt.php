@@ -20,16 +20,20 @@ var chart = new CanvasJS.Chart("chartContainer", {
   animationEnabled: true,
   theme: "light2",
   title:{
-    text: "SPO2 Level"
+    text: "body temperature Level"
   },
   axisY: {
-    title: "SPO2 %"
+    title: "bt %"
   },
    axisX: {
     title: "Time (hours)"
   },
   data: [{
     type: "column",
+    name: "Body temperature",
+    indexLabel: "{y}",
+    showInLegend: true,
+    color: "#008080",
     dataPoints: <?php echo json_encode($dataPoints, JSON_NUMERIC_CHECK); ?>
   }]
 });
