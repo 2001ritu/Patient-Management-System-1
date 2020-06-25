@@ -27,6 +27,10 @@ var chart = new CanvasJS.Chart("chartContainer", {
   },
   data: [{
     type: "column",
+    name: "pulse rate",
+    indexLabel: "{y}",
+    showInLegend: true,
+    color: "#008080",
     dataPoints: <?php echo json_encode($dataPoints, JSON_NUMERIC_CHECK); ?>
   }]
 });
