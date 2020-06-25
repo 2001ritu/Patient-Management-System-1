@@ -37,16 +37,17 @@ var chart = new CanvasJS.Chart("chartContainer", {
     itemclick: toggleDataSeries
   },
   axisX: {
-    title: "Time (in hours)"
+    title: "Time (hours)"
   },
   axisY: {
-    title: "Pressure (in mm-Hg)"
+    title: "Pressure (mm-Hg)"
   },
   data: [{
     type: "column",
     name: "Systolic Pressure",
     indexLabel: "{y}",
     showInLegend: true,
+    color: "teal",
     dataPoints: <?php echo json_encode($dataPoints1, JSON_NUMERIC_CHECK); ?>
   },{
     type: "column",
