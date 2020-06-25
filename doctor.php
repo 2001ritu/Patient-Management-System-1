@@ -1,42 +1,103 @@
-
-
-
-
-
 <?php include "dbConfig.php";
 session_start();
 $msg = "";
-if($_SERVER["REQUEST_METHOD"] == "POST") {
+$emailErr = '';
+$pwdErr = '';
+if($_SERVER["REQUEST_METHOD"] == "POST")
+ {
     $name = $_POST['name'];
     $password = $_POST['password'];
     $firstname = $_POST['firstname'];
     $lastname = $_POST['lastname'];
     $gender = $_POST['gender'];
-    
-    $usertype = $_POST['usertype'];
-    $weight = $_POST['weight'];
-    $height = $_POST['height'];
     $phoneno = $_POST['phoneno'];
-    $bloodgroup =$_POST['bloodgroup'];
     $age = $_POST['age'];
     $specialization = $_POST['specialization'];
-   
-         if ($name == '' || $password == '' || $firstname=='' || $lastname=='' || $gender=='' ||
-         $usertype =='' || $weight =='' || $height == '' || $phoneno == '' || $bloodgroup =='' || $age =='' || $specialization ==''){
-        $msg = "You must enter all fields";
-    } else {
-        $sql = "INSERT INTO record values('$name', '$password','$firstname','$lastname','$gender','$usertype','$weight','$height','$phoneno','$bloodgroup','$age','$specialization')";
-        $query = mysqli_query($link, $sql);
 
-        if ($query === false) {
-            echo "Could not successfully run query ($sql) from DB: " . mysqli_error($link);
-            exit;
+    $pwdpattern = '/^(?=.*[!@#$%^&*-_])(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z]).{8,20}$/';
+           if ($name == '' || $password == '' || $firstname=='' || $lastname=='' || $gender=='' ||  $phoneno == '' || $age =='' || $specialization =='')
+        {
+         echo '
+        <!DOCTYPE html>
+        <html>
+        <head>
+        <script>
+        alert("You must enter all fields");
+        </script>
+        </head>
+        <body>
+
+        </body>
+        </html>';
         }
-    
-        echo "Registration completed successfully <br>";
-        echo(sha1($firstname));
+ else {
+        if(preg_match($pwdpattern, $password) && 
+                filter_var($name, FILTER_VALIDATE_EMAIL) ){
+           $id = sha1($firstname.$name.$phoneno);
+           $selectsql ="SELECT username FROM  patient WHERE username = '$name'";
+                $selectquery = mysqli_query($link, $selectsql);
+                if(mysqli_num_rows($selectquery) == 1){
+                    echo '
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                    <script>
+                    alert("this email already exists, You can Login. to register use different email");
+                    </script>
+                    </head>
+                    <body>
+
+                    </body>
+                    </html>';}
+                    else{
+           $sql = "INSERT INTO doctor values('$id','$name', '$password','$firstname','$lastname','$gender','$phoneno','$age','$specialization')";
+           $query = mysqli_query($link, $sql);
+                                   
+           
+
+            if ($query === false) {
+            echo "Could not successfully run query ($sql) from DB: " . mysqli_error($link);
+            exit;}
+        
+        else{
+            $hash = md5( rand(0,1000) ); 
+           $to      = $name; // Send email to our user
+            $subject = 'Signup | Verification'; // Give the email a subject 
+            $message = '
+             
+            Thanks for signing up!
+            Your account has been created, you can login with the following credentials after you have activated your account by pressing the url below.
+             
+            ------------------------
+            Username: '.$name.'
+            Password: '.$password.'
+            ------------------------
+             
+            Please click this link to activate your account:
+            http://www.yourwebsite.com/verify.php?email='.$name.'&hash='.$hash.'
+             
+            '; // Our message above including the link
+                                 
+            $headers = 'From:hritus4@gmail.com' . "\r\n"; // Set from headers
+            mail($to, $subject, $message, $headers); // Send our email
+                     echo '
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                    <script>
+                    alert("Registration completed successfully, You can Now Login to your account");
+                    </script>
+                    </head>
+                    <body>
+
+                    </body>
+                    </html>';}}
+            } 
+            else {
+               echo "password or mail is not sufficient ";
+                 }     
        
-        $msg = "Username and password do not match";
+        
     }
 }
 
@@ -89,6 +150,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
                     
                         <div class="doctor">
                         <input type="text" placeholder="Specialization" name="specialization">
+
 
                        </div>
                         
