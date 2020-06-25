@@ -8,7 +8,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
      if ($name == '' || $password == '' ) {
         $msg = "You must enter all fields";
     } else {
-        $sql = "SELECT * FROM  members WHERE name = '$name' AND password = '$password'";
+        $sql = "SELECT username FROM  patient WHERE username = '$name' AND password = '$password'
+        UNION SELECT username FROM  doctor WHERE username = '$name' AND password = '$password'";
         $query = mysqli_query($link, $sql);
 
         if ($query === false) {
@@ -30,11 +31,11 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="loginbox" >
          
              <h1>Login </h1>
-            <form>
+            <form method="POST">
                 <p>Usename</p>
-                <input type="text name" name="" placeholder="Enter Username">
+                <input type="text name" name="name" placeholder="Enter Username">
                 <p>Password</p>
-                <input type="password" name=""placeholder="Enter Password">
+                <input type="password" name="password"placeholder="Enter Password">
                 <input type="Submit" name="" value="Login">
                 <br>
                 <a href="#">Forgot your password?</a><br>
